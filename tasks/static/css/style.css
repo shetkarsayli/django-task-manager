@@ -1,0 +1,40 @@
+.dark-mode {
+    background-color: #121212 !important;
+    color: white !important;
+}
+
+.dark-mode .main-card {
+    background-color: #1e1e1e !important;
+    color: white !important;
+}
+
+.dark-mode .form-control {
+    background-color: #2c2c2c !important;
+    color: white !important;
+    border: 1px solid #444;
+}
+
+.dark-mode .task-row {
+    background-color: #2a2a2a !important;
+    color: white !important;
+}
+.dark-mode .text-muted {
+    color: #bbbbbb !important;
+}
+
+.dark-mode .text-decoration-line-through {
+    color: #ffffff !important;
+}
+.completed-task {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.dark-mode .completed-task {
+    color: #bbbbbb;
+}
+.dark-mode .form-control::placeholder {
+    color: #bbbbbb !important;
+    /* opacity: 1; */
+}
+

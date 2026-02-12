@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body id="pageBody">
+
+
+<div class="container mt-5">
+<div class="card shadow p-4 main-card">
+         <div class="text-end">
+    <button onclick="toggleMode()" class="btn btn-sm btn-secondary">
+        🌙 Toggle Dark Mode
+    </button>
+</div>
+        <h2 class="text-center mb-4">📝 Task Management</h2>
+       
+<div class="row text-center mb-4">
+    <div class="col">
+        <div class="card bg-dark text-white p-2 shadow-sm">
+            <h6>Total</h6>
+            <h4>{{ total_tasks }}</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-success text-white p-2 shadow-sm">
+            <h6>Completed</h6>
+            <h4>{{ completed_tasks }}</h4>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-warning text-dark p-2 shadow-sm">
+            <h6>Pending</h6>
+            <h4>{{ pending_tasks }}</h4>
+        </div>
+    </div>
+</div>
+
+        <!-- Add Task Form -->
+        <form method="POST" action="/add/" class="d-flex gap-2">
+            {% csrf_token %}
+            <input type="text" name="title" class="form-control" placeholder="Enter task" required>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+        <hr>
+        <div class="mb-3 text-center">
+             <a href="/" 
+       class="btn btn-sm {% if filter_type == 'all' %}btn-dark{% else %}btn-outline-dark{% endif %}">
+        All
+    </a>
+
+    <a href="/?filter=completed" 
+       class="btn btn-sm {% if filter_type == 'completed' %}btn-success{% else %}btn-outline-success{% endif %}">
+        Completed
+    </a>
+
+    <a href="/?filter=pending" 
+       class="btn btn-sm {% if filter_type == 'pending' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+        Pending
+    </a>
+
+</div>
+
+        <!-- Task List -->
+        {% for task in tasks %}
+<div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded shadow-sm task-row">
+                
+                <div>
+                    {% if task.completed %}
+                        <span class="text-decoration-line-through text-muted">
+                            {{ task.title }}
+                        </span>
+                    {% else %}
+                        <span>{{ task.title }}</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {% if not task.completed %}
+                        <a href="/complete/{{ task.id }}/" class="btn btn-success btn-sm">Complete</a>
+                    {% endif %}
+                    <a href="/edit/{{task.id}}/" class="btn btn-info btn-sm">Edit</a>
+<a href="/delete/{{ task.id }}/"
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('Are you sure you want to delete this task?');">
+   Delete
+</a>
+                    
+                </div>
+
+            </div>
+        {% empty %}
+            <p class="text-center text-muted">No tasks available.</p>
+        {% endfor %}
+    </div>
+</div><script>
+function toggleMode() {
+    const body = document.getElementById("pageBody");
+    body.classList.toggle("dark-mode");
+
+    if (body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+}
+
+window.onload = function() {
+    if (localStorage.getItem("theme") === "dark") {
+        document.getElementById("pageBody").classList.add("dark-mode");
+    }
+}
+</script>
+</body>
+</html>
